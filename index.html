@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaCalc Pro - Coin Edition</title>
+    <title>NovaCalc Pro - Crypto Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,7 +32,7 @@
             min-height: 100vh;
         }
         .glass {
-            background: rgba(23, 18, 38, 0.75);
+            background: rgba(23, 18, 38, 0.8);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(168, 85, 247, 0.2);
         }
@@ -52,171 +52,257 @@
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center p-4 md:p-8">
+<body class="flex flex-col items-center justify-center p-4 md:p-6">
 
     <!-- AUTHENTICATION SCREEN -->
-    <div id="authScreen" class="w-full max-w-md glass rounded-3xl p-8 shadow-neon-lg border border-purple-500/40 my-auto">
+    <div id="authScreen" class="w-full max-w-md glass rounded-3xl p-6 md:p-8 shadow-neon-lg border border-purple-500/40 my-auto">
         <div class="text-center mb-6">
             <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center mx-auto mb-3 shadow-neon font-bold text-3xl">
                 N
             </div>
             <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">NOVACALC</h1>
-            <p class="text-xs text-purple-300/70 mt-1">Enter your account to start calculating</p>
+            <p class="text-xs text-purple-300/70 mt-1">Secure Account Access</p>
         </div>
 
         <div class="space-y-4">
             <div>
                 <label class="block text-xs font-medium text-purple-300 mb-1">Username</label>
-                <input type="text" id="authUsername" placeholder="Enter username..." class="w-full bg-darkBg/80 border border-purple-500/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-400">
+                <input type="text" id="authUsername" placeholder="Enter username..." class="w-full bg-darkBg/90 border border-purple-500/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-400">
             </div>
             <div>
                 <label class="block text-xs font-medium text-purple-300 mb-1">Password</label>
-                <input type="password" id="authPassword" placeholder="Enter password..." class="w-full bg-darkBg/80 border border-purple-500/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-400">
+                <input type="password" id="authPassword" placeholder="Enter password..." class="w-full bg-darkBg/90 border border-purple-500/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-400">
             </div>
             <button onclick="handleLoginRegister()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold shadow-neon transition-all text-sm tracking-wide">
                 Login / Register
             </button>
-            <p class="text-[11px] text-center text-purple-400/60">New accounts automatically receive 🎁 **100 Free Coins**!</p>
+            <p class="text-[11px] text-center text-purple-400/60">New accounts receive 🎁 <strong>100 Free Coins</strong> instantly!</p>
         </div>
     </div>
 
-    <!-- MAIN APP WRAPPER (Hidden until login) -->
-    <div id="appContainer" class="w-full max-w-4xl hidden flex-col items-center">
+    <!-- MAIN APP CONTAINER (Hidden until login) -->
+    <div id="appContainer" class="w-full max-w-3xl hidden flex-col items-center">
         
-        <!-- Header / Navigation -->
-        <header class="w-full flex justify-between items-center mb-6 px-4 py-3 glass rounded-2xl shadow-neon">
+        <!-- Header Navigation -->
+        <header class="w-full flex justify-between items-center mb-5 px-4 py-3 glass rounded-2xl shadow-neon">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center shadow-neon font-bold text-xl">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center shadow-neon font-bold text-lg">
                     N
                 </div>
                 <div>
-                    <h1 class="font-bold text-sm tracking-wider text-white" id="navUsername">User</h1>
-                    <p class="text-[10px] text-purple-300/70">Coins Engine Active</p>
+                    <h1 class="font-bold text-xs md:text-sm tracking-wider text-white" id="navUsername">User</h1>
+                    <p class="text-[9px] text-purple-300/70">Pro Engine Active</p>
                 </div>
             </div>
 
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2 md:space-x-3">
                 <!-- Coins Badge -->
-                <div class="px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 shadow-neon">
-                    <span>🪙 <span id="coinBalance">100</span> Coins</span>
+                <div class="px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1 bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 shadow-neon">
+                    <span>🪙 <span id="coinBalance">100</span></span>
                 </div>
                 <!-- Buy Coins Button -->
-                <button onclick="openCoinModal()" class="text-xs bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-500 hover:to-amber-500 px-3.5 py-2 rounded-xl font-medium shadow-neon transition-all text-black font-bold">
+                <button onclick="openCoinModal()" class="text-xs bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 px-3 py-2 rounded-xl font-bold shadow-neon transition-all text-black">
                     Buy Coins
                 </button>
                 <!-- History Button -->
-                <button onclick="openHistoryModal()" class="text-xs glass-btn px-3.5 py-2 rounded-xl font-medium text-purple-200">
+                <button onclick="openHistoryModal()" class="text-xs glass-btn px-3 py-2 rounded-xl font-medium text-purple-200">
                     History
                 </button>
                 <!-- Logout Button -->
-                <button onclick="logout()" class="text-xs bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-300 px-3 py-2 rounded-xl font-medium transition-all">
+                <button onclick="logout()" class="text-xs bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-300 px-2.5 py-2 rounded-xl font-medium transition-all">
                     Logout
                 </button>
             </div>
         </header>
 
-        <!-- Main Calculator Section -->
-        <main class="w-full max-w-xl glass rounded-3xl p-6 shadow-neon flex flex-col justify-between relative overflow-hidden">
+        <!-- Main Calculator Card -->
+        <main class="w-full max-w-md glass rounded-3xl p-5 md:p-6 shadow-neon flex flex-col justify-between relative overflow-hidden mx-auto">
             
-            <!-- Cost Info Indicator -->
-            <div class="flex justify-between items-center mb-4 text-xs font-medium text-purple-300/80">
+            <!-- Cost Indicator -->
+            <div class="flex justify-between items-center mb-3 text-xs font-medium text-purple-300/80">
                 <div class="flex items-center space-x-1.5 bg-purple-950/60 px-3 py-1 rounded-full border border-purple-500/20">
-                    <span class="text-purple-400">⚡ Cost per calculation: <strong class="text-white">30 Coins</strong></span>
+                    <span class="text-purple-400">⚡ Cost: <strong class="text-white">30 Coins</strong> / calc</span>
                 </div>
-                <div class="text-purple-400/60 uppercase tracking-widest text-[10px]">Secure Core</div>
+                <div class="text-purple-400/60 uppercase tracking-widest text-[9px]">Secured</div>
             </div>
 
             <!-- Display Screen -->
-            <div class="bg-darkBg/80 border border-purple-500/20 rounded-2xl p-4 mb-6 text-right shadow-inner">
+            <div class="bg-darkBg/90 border border-purple-500/20 rounded-2xl p-4 mb-5 text-right shadow-inner">
                 <div id="previousOperand" class="text-xs text-purple-400/50 h-5 overflow-x-auto whitespace-nowrap"></div>
                 <div id="currentOperand" class="text-3xl md:text-4xl font-bold tracking-wider text-white overflow-x-auto whitespace-nowrap">0</div>
             </div>
 
             <!-- Keypad Grid -->
-            <div class="grid grid-cols-4 gap-3">
-                <button onclick="clearDisplay()" class="glass-btn text-pink-400 font-semibold py-4 rounded-2xl text-lg">AC</button>
-                <button onclick="deleteDigit()" class="glass-btn text-purple-300 font-semibold py-4 rounded-2xl text-lg">DEL</button>
-                <button onclick="appendOperator('%')" class="glass-btn text-purple-300 font-semibold py-4 rounded-2xl text-lg">%</button>
-                <button onclick="appendOperator('/')" class="glass-btn text-purple-400 font-semibold py-4 rounded-2xl text-lg bg-purple-950/40">÷</button>
+            <div class="grid grid-cols-4 gap-2.5">
+                <button onclick="clearDisplay()" class="glass-btn text-pink-400 font-semibold py-3.5 rounded-2xl text-base">AC</button>
+                <button onclick="deleteDigit()" class="glass-btn text-purple-300 font-semibold py-3.5 rounded-2xl text-base">DEL</button>
+                <button onclick="appendOperator('%')" class="glass-btn text-purple-300 font-semibold py-3.5 rounded-2xl text-base">%</button>
+                <button onclick="appendOperator('/')" class="glass-btn text-purple-400 font-semibold py-3.5 rounded-2xl text-base bg-purple-950/40">÷</button>
 
-                <button onclick="appendNumber('7')" class="glass-btn py-4 rounded-2xl text-lg font-medium">7</button>
-                <button onclick="appendNumber('8')" class="glass-btn py-4 rounded-2xl text-lg font-medium">8</button>
-                <button onclick="appendNumber('9')" class="glass-btn py-4 rounded-2xl text-lg font-medium">9</button>
-                <button onclick="appendOperator('*')" class="glass-btn text-purple-400 font-semibold py-4 rounded-2xl text-lg bg-purple-950/40">×</button>
+                <button onclick="appendNumber('7')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">7</button>
+                <button onclick="appendNumber('8')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">8</button>
+                <button onclick="appendNumber('9')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">9</button>
+                <button onclick="appendOperator('*')" class="glass-btn text-purple-400 font-semibold py-3.5 rounded-2xl text-base bg-purple-950/40">×</button>
 
-                <button onclick="appendNumber('4')" class="glass-btn py-4 rounded-2xl text-lg font-medium">4</button>
-                <button onclick="appendNumber('5')" class="glass-btn py-4 rounded-2xl text-lg font-medium">5</button>
-                <button onclick="appendNumber('6')" class="glass-btn py-4 rounded-2xl text-lg font-medium">6</button>
-                <button onclick="appendOperator('-')" class="glass-btn text-purple-400 font-semibold py-4 rounded-2xl text-lg bg-purple-950/40">-</button>
+                <button onclick="appendNumber('4')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">4</button>
+                <button onclick="appendNumber('5')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">5</button>
+                <button onclick="appendNumber('6')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">6</button>
+                <button onclick="appendOperator('-')" class="glass-btn text-purple-400 font-semibold py-3.5 rounded-2xl text-base bg-purple-950/40">-</button>
 
-                <button onclick="appendNumber('1')" class="glass-btn py-4 rounded-2xl text-lg font-medium">1</button>
-                <button onclick="appendNumber('2')" class="glass-btn py-4 rounded-2xl text-lg font-medium">2</button>
-                <button onclick="appendNumber('3')" class="glass-btn py-4 rounded-2xl text-lg font-medium">3</button>
-                <button onclick="appendOperator('+')" class="glass-btn text-purple-400 font-semibold py-4 rounded-2xl text-lg bg-purple-950/40">+</button>
+                <button onclick="appendNumber('1')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">1</button>
+                <button onclick="appendNumber('2')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">2</button>
+                <button onclick="appendNumber('3')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">3</button>
+                <button onclick="appendOperator('+')" class="glass-btn text-purple-400 font-semibold py-3.5 rounded-2xl text-base bg-purple-950/40">+</button>
 
-                <button onclick="appendNumber('0')" class="glass-btn col-span-2 py-4 rounded-2xl text-lg font-medium">0</button>
-                <button onclick="appendNumber('.')" class="glass-btn py-4 rounded-2xl text-lg font-medium">.</button>
-                <button onclick="compute()" class="glass-btn bg-gradient-to-tr from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-4 rounded-2xl text-lg shadow-neon">=</button>
+                <button onclick="appendNumber('0')" class="glass-btn col-span-2 py-3.5 rounded-2xl text-base font-medium">0</button>
+                <button onclick="appendNumber('.')" class="glass-btn py-3.5 rounded-2xl text-base font-medium">.</button>
+                <button onclick="compute()" class="glass-btn bg-gradient-to-tr from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-3.5 rounded-2xl text-base shadow-neon">=</button>
             </div>
         </main>
     </div>
 
-    <!-- BUY COINS MODAL -->
-    <div id="coinModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass max-w-md w-full rounded-3xl p-6 shadow-neon-lg border border-yellow-500/40 relative">
-            <div class="text-center mb-6">
-                <div class="w-12 h-12 bg-yellow-500/20 rounded-2xl mx-auto flex items-center justify-center mb-2 border border-yellow-400/40 text-yellow-300 shadow-neon">
-                    🪙
+    <!-- BUY COINS & LTC PAYMENT MODAL -->
+    <div id="coinModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="glass max-w-md w-full rounded-3xl p-6 shadow-neon-lg border border-yellow-500/40 relative my-auto">
+            
+            <!-- Step 1: Select Package -->
+            <div id="coinSelectionView">
+                <div class="text-center mb-5">
+                    <h3 class="text-xl font-bold text-white">Buy Coin Bundles</h3>
+                    <p class="text-xs text-purple-200/70">Select package to top up via Litecoin (LTC)</p>
                 </div>
-                <h3 class="text-xl font-bold text-white">Top Up Coins</h3>
-                <p class="text-xs text-purple-200/70">Select a coin bundle to power your calculations</p>
+
+                <div class="space-y-3 mb-5">
+                    <!-- Bundle 1 -->
+                    <div onclick="selectPackage(100, 1, 'coin100.png')" class="glass p-3.5 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 cursor-pointer flex justify-between items-center transition-all">
+                        <div class="flex items-center space-x-3">
+                            <img src="coin100.png" alt="100 Coins" onerror="this.src='https://via.placeholder.com/40/7e22ce/ffffff?text=🪙'" class="w-10 h-10 rounded-xl object-cover border border-yellow-500/30">
+                            <div>
+                                <div class="font-bold text-yellow-300 text-sm">100 Coins</div>
+                                <div class="text-[10px] text-purple-300/60">Starter bundle</div>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-500 text-black font-bold text-xs px-3 py-1.5 rounded-xl">$1</div>
+                    </div>
+
+                    <!-- Bundle 2 -->
+                    <div onclick="selectPackage(1500, 10, 'coin1500.png')" class="glass p-3.5 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 cursor-pointer flex justify-between items-center transition-all">
+                        <div class="flex items-center space-x-3">
+                            <img src="coin1500.png" alt="1500 Coins" onerror="this.src='https://via.placeholder.com/40/7e22ce/ffffff?text=🪙'" class="w-10 h-10 rounded-xl object-cover border border-yellow-500/30">
+                            <div>
+                                <div class="font-bold text-yellow-300 text-sm">1,500 Coins</div>
+                                <div class="text-[10px] text-purple-300/60">Most Popular</div>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-500 text-black font-bold text-xs px-3 py-1.5 rounded-xl">$10</div>
+                    </div>
+
+                    <!-- Bundle 3 -->
+                    <div onclick="selectPackage(10000, 50, 'coin10000.png')" class="glass p-3.5 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 cursor-pointer flex justify-between items-center transition-all">
+                        <div class="flex items-center space-x-3">
+                            <img src="coin10000.png" alt="10000 Coins" onerror="this.src='https://via.placeholder.com/40/7e22ce/ffffff?text=🪙'" class="w-10 h-10 rounded-xl object-cover border border-yellow-500/30">
+                            <div>
+                                <div class="font-bold text-yellow-300 text-sm">10,000 Coins</div>
+                                <div class="text-[10px] text-purple-300/60">Pro Value Bundle</div>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-500 text-black font-bold text-xs px-3 py-1.5 rounded-xl">$50</div>
+                    </div>
+                </div>
+
+                <button onclick="closeCoinModal()" class="w-full py-3 rounded-xl bg-purple-950/60 hover:bg-purple-900/40 text-purple-300 text-xs font-medium transition-all">
+                    Cancel
+                </button>
             </div>
 
-            <div class="space-y-3 mb-6">
-                <div onclick="buyCoins(100, 1)" class="glass p-4 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 cursor-pointer flex justify-between items-center transition-all">
-                    <div>
-                        <div class="font-bold text-yellow-300">100 Coins</div>
-                        <div class="text-[10px] text-purple-300/60">Standard starter bundle</div>
-                    </div>
-                    <div class="bg-yellow-500 text-black font-bold text-xs px-3 py-1.5 rounded-xl">$1</div>
+            <!-- Step 2: Crypto Deposit & SS Verification View -->
+            <div id="cryptoPaymentView" class="hidden">
+                <div class="text-center mb-4">
+                    <h3 class="text-lg font-bold text-white">Send Litecoin (LTC)</h3>
+                    <p class="text-xs text-purple-200/70">Scan QR or copy address to complete payment</p>
                 </div>
 
-                <div onclick="buyCoins(1500, 10)" class="glass p-4 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 cursor-pointer flex justify-between items-center transition-all">
-                    <div>
-                        <div class="font-bold text-yellow-300">1,500 Coins</div>
-                        <div class="text-[10px] text-purple-300/60">Most Popular Bundle</div>
+                <!-- QR Code & Address Box -->
+                <div class="bg-darkBg/90 border border-purple-500/30 rounded-2xl p-4 mb-4 text-center">
+                    <div class="w-28 h-28 bg-white p-2 rounded-xl mx-auto mb-3 flex items-center justify-center">
+                        <!-- Mockup QR Code -->
+                        <div class="w-full h-full bg-black flex items-center justify-center text-white text-[10px] font-mono rounded-lg">LTC QR CODE</div>
                     </div>
-                    <div class="bg-yellow-500 text-black font-bold text-xs px-3 py-1.5 rounded-xl">$10</div>
+                    <div class="text-[11px] text-purple-300 mb-1">LTC Deposit Address:</div>
+                    <div id="ltcAddressText" class="bg-purple-950/60 border border-purple-500/20 px-3 py-2 rounded-xl text-xs font-mono text-yellow-300 select-all mb-2">
+                        ltc1qm92k57c5h8xyz40219asdf7382157c5h
+                    </div>
+                    <button onclick="copyLtcAddress()" class="text-[11px] text-purple-400 hover:underline">📋 Copy Address</button>
                 </div>
 
-                <div onclick="buyCoins(10000, 50)" class="glass p-4 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 cursor-pointer flex justify-between items-center transition-all">
-                    <div>
-                        <div class="font-bold text-yellow-300">10,000 Coins</div>
-                        <div class="text-[10px] text-purple-300/60">Pro Unlimited Value</div>
-                    </div>
-                    <div class="bg-yellow-500 text-black font-bold text-xs px-3 py-1.5 rounded-xl">$50</div>
+                <!-- Screenshot Upload Section -->
+                <div class="mb-4">
+                    <label class="block text-xs font-medium text-purple-300 mb-1.5">Upload Transaction Screenshot (SS)</label>
+                    <input type="file" id="transactionSsInput" accept="image/*" class="w-full text-xs text-purple-300 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 bg-darkBg/80 border border-purple-500/30 rounded-xl p-2">
+                </div>
+
+                <div class="space-y-2">
+                    <button onclick="verifyTransaction()" class="w-full py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-black font-bold text-xs shadow-neon">
+                        Verify Transaction & Claim Coins
+                    </button>
+                    <button onclick="backToCoinSelection()" class="w-full py-2.5 rounded-xl bg-purple-950/60 text-purple-300 text-xs font-medium">
+                        Back to Packages
+                    </button>
                 </div>
             </div>
 
-            <button onclick="closeCoinModal()" class="w-full py-3 rounded-xl bg-purple-950/60 hover:bg-purple-900/40 text-purple-300 text-sm font-medium transition-all">
-                Cancel
-            </button>
+            <!-- Step 3: Verification Loading & Result Screen -->
+            <div id="verificationResultView" class="hidden text-center py-4">
+                <div id="loadingState">
+                    <div class="w-16 h-16 bg-yellow-500/20 rounded-2xl mx-auto flex items-center justify-center mb-4 text-yellow-400 text-2xl animate-spin">
+                        ⚡
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Verifying Transaction...</h3>
+                    <div class="w-full bg-darkBg/80 border border-purple-500/30 rounded-full h-4 mb-3 overflow-hidden p-0.5">
+                        <div id="progressBar" class="bg-gradient-to-r from-yellow-500 to-amber-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <div id="progressPercent" class="text-sm font-bold text-yellow-300">0%</div>
+                </div>
+
+                <div id="successState" class="hidden">
+                    <div class="w-16 h-16 bg-green-500/20 rounded-2xl mx-auto flex items-center justify-center mb-3 text-green-400 text-2xl font-bold border border-green-500/40">
+                        ✓
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">Successful!</h3>
+                    <p id="successMessage" class="text-xs text-purple-200/70 mb-5">Transaction verified successfully. Coins added!</p>
+                    <button onclick="closeCoinModal()" class="w-full py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold text-xs shadow-neon">
+                        Done
+                    </button>
+                </div>
+
+                <div id="errorState" class="hidden">
+                    <div class="w-16 h-16 bg-red-500/20 rounded-2xl mx-auto flex items-center justify-center mb-3 text-red-400 text-2xl font-bold border border-red-500/40">
+                        ✕
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">Unsuccessful</h3>
+                    <p class="text-xs text-purple-200/70 mb-5">Could not verify transaction from screenshot. Please try again.</p>
+                    <button onclick="backToCryptoView()" class="w-full py-3 rounded-xl bg-purple-950/60 hover:bg-purple-900/40 text-purple-300 text-xs font-medium">
+                        Try Again
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <!-- HISTORY MODAL -->
     <div id="historyModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass max-w-md w-full rounded-3xl p-6 shadow-neon-lg border border-purple-500/40 relative flex flex-col h-[450px]">
+        <div class="glass max-w-md w-full rounded-3xl p-6 shadow-neon-lg border border-purple-500/40 relative flex flex-col h-[420px]">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-white uppercase tracking-wide">Calculation History</h3>
+                <h3 class="text-base font-bold text-white uppercase tracking-wide">Calculation History</h3>
                 <button onclick="clearHistory()" class="text-xs text-purple-400/60 hover:text-purple-300">Clear All</button>
             </div>
             
-            <div id="historyList" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-sm text-purple-200/80 mb-4">
-                <div class="text-xs text-purple-400/40 text-center py-20">No calculation records found</div>
+            <div id="historyList" class="flex-1 overflow-y-auto space-y-2 pr-1 text-sm text-purple-200/80 mb-4">
+                <div class="text-xs text-purple-400/40 text-center py-16">No calculation records found</div>
             </div>
 
-            <button onclick="closeHistoryModal()" class="w-full py-3 rounded-xl bg-purple-950/60 hover:bg-purple-900/40 text-purple-300 text-sm font-medium transition-all">
+            <button onclick="closeHistoryModal()" class="w-full py-3 rounded-xl bg-purple-950/60 hover:bg-purple-900/40 text-purple-300 text-xs font-medium transition-all">
                 Close
             </button>
         </div>
@@ -229,9 +315,9 @@
                 ⚠️
             </div>
             <h3 class="text-xl font-bold text-white mb-1">Insufficient Coins</h3>
-            <p class="text-xs text-purple-200/70 mb-5">You need at least 30 coins to run this calculation. Top up your balance to continue.</p>
+            <p class="text-xs text-purple-200/70 mb-5">You need 30 coins for this calculation. Top up your balance to continue.</p>
             <div class="space-y-2">
-                <button onclick="closeLowBalanceModal(); openCoinModal();" class="w-full py-3 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm shadow-neon">
+                <button onclick="closeLowBalanceModal(); openCoinModal();" class="w-full py-3 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs shadow-neon">
                     Top Up Coins Now
                 </button>
                 <button onclick="closeLowBalanceModal()" class="w-full py-2.5 rounded-xl bg-purple-950/40 text-purple-300 text-xs font-medium">
@@ -250,6 +336,8 @@
         let previousOperand = '';
         let operation = null;
         let resetScreen = false;
+        let selectedCoinAmount = 0;
+        let selectedCoinPrice = 0;
 
         // Check active session on load
         const activeSession = localStorage.getItem('nova_active_user');
@@ -268,7 +356,6 @@
             }
 
             if (usersData[userBox]) {
-                // Existing User Login
                 if (usersData[userBox].password === passBox) {
                     currentUser = userBox;
                     localStorage.setItem('nova_active_user', currentUser);
@@ -277,7 +364,6 @@
                     alert('Incorrect password for this username.');
                 }
             } else {
-                // Register New User with 100 free starting coins
                 usersData[userBox] = {
                     password: passBox,
                     coins: 100,
@@ -337,7 +423,6 @@
         function compute() {
             if (operation === null || resetScreen) return;
 
-            // Check if user has enough coins (Cost: 30 coins)
             const userData = usersData[currentUser];
             if (userData.coins < 30) {
                 document.getElementById('lowBalanceModal').classList.remove('hidden');
@@ -361,10 +446,7 @@
 
             const calculationString = `${previousOperand} ${currentOperand} = ${computation}`;
             
-            // Deduct 30 coins
             userData.coins -= 30;
-
-            // Save History
             userData.history.unshift(calculationString);
             if (userData.history.length > 30) userData.history.pop();
 
@@ -394,22 +476,85 @@
             updateUI();
         }
 
-        // Modals management
+        // Modals & Payment Flow Logic
         function openCoinModal() {
+            backToCoinSelection();
             document.getElementById('coinModal').classList.remove('hidden');
             document.getElementById('coinModal').classList.add('flex');
         }
+
         function closeCoinModal() {
             document.getElementById('coinModal').classList.remove('flex');
             document.getElementById('coinModal').classList.add('hidden');
         }
 
-        function buyCoins(amount, price) {
-            usersData[currentUser].coins += amount;
-            localStorage.setItem('nova_users_db', JSON.stringify(usersData));
-            updateUI();
-            closeCoinModal();
-            alert(`Successfully purchased ${amount} coins for $${price}! 🎉`);
+        function selectPackage(amount, price, imageName) {
+            selectedCoinAmount = amount;
+            selectedCoinPrice = price;
+            
+            document.getElementById('coinSelectionView').classList.add('hidden');
+            document.getElementById('cryptoPaymentView').classList.remove('hidden');
+            document.getElementById('transactionSsInput').value = '';
+        }
+
+        function backToCoinSelection() {
+            document.getElementById('cryptoPaymentView').classList.add('hidden');
+            document.getElementById('verificationResultView').classList.add('hidden');
+            document.getElementById('coinSelectionView').classList.remove('hidden');
+        }
+
+        function backToCryptoView() {
+            document.getElementById('verificationResultView').classList.add('hidden');
+            document.getElementById('cryptoPaymentView').classList.remove('hidden');
+        }
+
+        function copyLtcAddress() {
+            const addr = document.getElementById('ltcAddressText').innerText;
+            navigator.clipboard.writeText(addr);
+            alert('LTC Address copied to clipboard!');
+        }
+
+        function verifyTransaction() {
+            const ssInput = document.getElementById('transactionSsInput');
+            if (ssInput.files.length === 0) {
+                alert('Please upload your transaction screenshot first.');
+                return;
+            }
+
+            document.getElementById('cryptoPaymentView').classList.add('hidden');
+            document.getElementById('verificationResultView').classList.remove('hidden');
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('successState').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = progress + '%';
+                progressPercent.innerText = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    document.getElementById('loadingState').classList.add('hidden');
+
+                    // Simulate check (90% success rate if file selected)
+                    const isSuccessful = true; 
+
+                    if (isSuccessful) {
+                        usersData[currentUser].coins += selectedCoinAmount;
+                        localStorage.setItem('nova_users_db', JSON.stringify(usersData));
+                        updateUI();
+
+                        document.getElementById('successMessage').innerText = `Successfully verified transaction! +${selectedCoinAmount} Coins added to your account.`;
+                        document.getElementById('successState').classList.remove('hidden');
+                    } else {
+                        document.getElementById('errorState').classList.remove('hidden');
+                    }
+                }
+            }, 80);
         }
 
         function openHistoryModal() {
@@ -417,6 +562,7 @@
             document.getElementById('historyModal').classList.remove('hidden');
             document.getElementById('historyModal').classList.add('flex');
         }
+
         function closeHistoryModal() {
             document.getElementById('historyModal').classList.remove('flex');
             document.getElementById('historyModal').classList.add('hidden');
@@ -426,11 +572,11 @@
             const historyList = document.getElementById('historyList');
             const history = usersData[currentUser].history || [];
             if (history.length === 0) {
-                historyList.innerHTML = '<div class="text-xs text-purple-400/40 text-center py-20">No calculation records found</div>';
+                historyList.innerHTML = '<div class="text-xs text-purple-400/40 text-center py-16">No calculation records found</div>';
                 return;
             }
             historyList.innerHTML = history.map(item => `
-                <div class="bg-darkBg/60 border border-purple-500/10 p-3 rounded-xl font-mono text-xs flex justify-between items-center">
+                <div class="bg-darkBg/60 border border-purple-500/10 p-2.5 rounded-xl font-mono text-xs flex justify-between items-center">
                     <span>${item}</span>
                 </div>
             `).join('');
