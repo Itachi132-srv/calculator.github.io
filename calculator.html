@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaCalc Pro - Dark Purple Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0914',
+                        cardBg: 'rgba(23, 18, 38, 0.75)',
+                        purpleNeon: '#a855f7',
+                        purpleGlow: 'rgba(168, 85, 247, 0.4)',
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(168, 85, 247, 0.35)',
+                        'neon-lg': '0 0 35px rgba(168, 85, 247, 0.6)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at top, #1e1138 0%, #0b0914 100%);
+            color: #f3f4f6;
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(23, 18, 38, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .glass-btn {
+            background: rgba(30, 24, 52, 0.8);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            transition: all 0.2s ease;
+        }
+        .glass-btn:hover {
+            background: rgba(168, 85, 247, 0.25);
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
+        .glass-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 md:p-8">
+
+    <!-- Header / Navigation -->
+    <header class="w-full max-w-4xl flex justify-between items-center mb-6 px-4 py-3 glass rounded-2xl shadow-neon">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center shadow-neon font-bold text-xl">
+                N
+            </div>
+            <div>
+                <h1 class="font-bold text-lg tracking-wider bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">NOVACALC</h1>
+                <p class="text-xs text-purple-300/70">Next-Gen Calculation Engine</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <!-- Plan Status Badge -->
+            <div id="planBadge" class="px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase flex items-center space-x-1.5 bg-purple-900/40 border border-purple-500/30 text-purple-300">
+                <span id="badgeText">FREE PLAN</span>
+            </div>
+            <!-- Toggle Pro Button (For Testing/Demo) -->
+            <button onclick="toggleProStatus()" id="upgradeNavBtn" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-4 py-2 rounded-xl font-medium shadow-neon transition-all">
+                Upgrade to PRO
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Calculator Section (2 Cols) -->
+        <div class="md:col-span-2 glass rounded-3xl p-6 shadow-neon flex flex-col justify-between relative overflow-hidden">
+            
+            <!-- Top Status Bar inside Calculator -->
+            <div class="flex justify-between items-center mb-4 text-xs font-medium text-purple-300/80">
+                <div id="freeLimitCounter" class="flex items-center space-x-1.5 bg-purple-950/60 px-3 py-1 rounded-full border border-purple-500/20">
+                    <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span id="counterText">3/3 Free Calculations Remaining</span>
+                </div>
+                <div class="text-purple-400/60 uppercase tracking-widest text-[10px]">Standard Mode</div>
+            </div>
+
+            <!-- Display Screen -->
+            <div class="bg-darkBg/80 border border-purple-500/20 rounded-2xl p-4 mb-6 text-right shadow-inner">
+                <div id="previousOperand" class="text-xs text-purple-400/50 h-5 overflow-x-auto whitespace-nowrap"></div>
+                <div id="currentOperand" class="text-3xl md:text-4xl font-bold tracking-wider text-white overflow-x-auto whitespace-nowrap">0</div>
+            </div>
+
+            <!-- Keypad Grid -->
+            <div class="grid grid-cols-4 gap-3">
+                <button onclick="clearDisplay()" class="glass-btn text-pink-400 font-semibold py-4 rounded-2xl text-lg">AC</button>
+                <button onclick="deleteDigit()" class="glass-btn text-purple-300 font-semibold py-4 rounded-2xl text-lg">DEL</button>
+                <button onclick="appendOperator('%')" class="glass-btn text-purple-300 font-semibold py-4 rounded-2xl text-lg">%</button>
+                <button onclick="appendOperator('/')" class="glass-btn text-purple-400 font-semibold py-4 rounded-2xl text-lg bg-purple-950/40">÷</button>
+
+                <button onclick="appendNumber('7')" class="glass-btn py-4 rounded-2xl text-lg font-medium">7</button>
+                <button onclick="appendNumber('8')" class="glass-btn py-4 rounded-2xl text-lg font-medium">8</button>
+                <button onclick="appendNumber('9')" class="glass-btn py-4 rounded-2xl text-lg font-medium">9</button>
+                <button onclick="appendOperator('*')" class="glass-btn text-purple-400 font-semibold py-4 rounded-2xl text-lg bg-purple-950/40">×</button>
+
+                <button onclick="appendNumber('4')" class="glass-btn py-4 rounded-2xl text-lg font-medium">4</button>
+                <button onclick="appendNumber('5')" class="glass-btn py-4 rounded-2xl text-lg font-medium">5</button>
+                <button onclick="appendNumber('6')" class="glass-btn py-4 rounded-2xl text-lg font-medium">6</button>
+                <button onclick="appendOperator('-')" class="glass-btn text-purple-400 font-semibold py-4 rounded-2xl text-lg bg-purple-950/40">-</button>
+
+                <button onclick="appendNumber('1')" class="glass-btn py-4 rounded-2xl text-lg font-medium">1</button>
+                <button onclick="appendNumber('2')" class="glass-btn py-4 rounded-2xl text-lg font-medium">2</button>
+                <button onclick="appendNumber('3')" class="glass-btn py-4 rounded-2xl text-lg font-medium">3</button>
+                <button onclick="appendOperator('+')" class="glass-btn text-purple-400 font-semibold py-4 rounded-2xl text-lg bg-purple-950/40">+</button>
+
+                <button onclick="appendNumber('0')" class="glass-btn col-span-2 py-4 rounded-2xl text-lg font-medium">0</button>
+                <button onclick="appendNumber('.')" class="glass-btn py-4 rounded-2xl text-lg font-medium">.</button>
+                <button onclick="compute()" class="glass-btn bg-gradient-to-tr from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-4 rounded-2xl text-lg shadow-neon">=</button>
+            </div>
+        </div>
+
+        <!-- History Sidebar (1 Col) -->
+        <div class="glass rounded-3xl p-6 shadow-neon flex flex-col h-[480px] md:h-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="font-bold text-sm tracking-wide text-purple-200 uppercase">Calculation History</h2>
+                <button onclick="clearHistory()" class="text-xs text-purple-400/60 hover:text-purple-300">Clear</button>
+            </div>
+            <div id="historyList" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-sm text-purple-200/80">
+                <div class="text-xs text-purple-400/40 text-center py-10">No recent calculations</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Paywall Modal -->
+    <div id="paywallModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass max-w-md w-full rounded-3xl p-8 shadow-neon-lg border border-purple-500/40 text-center relative animate-pulse">
+            <div class="w-16 h-16 bg-purple-600/30 rounded-2xl mx-auto flex items-center justify-center mb-4 border border-purple-400/40 text-purple-300 shadow-neon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-2 bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">Daily Limit Reached</h3>
+            <p class="text-sm text-purple-200/70 mb-6">You've used all 3 free calculations for today. Upgrade to Calculator Pro for unlimited calculations and full history access.</p>
+            
+            <div class="space-y-3">
+                <button onclick="simulateUpgrade()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold shadow-neon transition-all">
+                    Upgrade to Calculator Pro
+                </button>
+                <button onclick="closePaywall()" class="w-full py-3 rounded-xl bg-purple-950/40 hover:bg-purple-900/40 text-purple-300 text-sm font-medium transition-all">
+                    Maybe Later
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        let currentOperand = '0';
+        let previousOperand = '';
+        let operation = null;
+        let resetScreen = false;
+        
+        // Freemium State Management
+        let isPro = localStorage.getItem('nova_isPro') === 'true';
+        let freeCalcsLeft = parseInt(localStorage.getItem('nova_freeCalcs')) || 3;
+        let lastResetDate = localStorage.getItem('nova_lastResetDate') || '';
+
+        // Check Daily Reset (24h/Day Reset)
+        const todayStr = new Date().toDateString();
+        if (lastResetDate !== todayStr) {
+            freeCalcsLeft = 3;
+            localStorage.setItem('nova_freeCalcs', 3);
+            localStorage.setItem('nova_lastResetDate', todayStr);
+        }
+
+        let history = JSON.parse(localStorage.getItem('nova_history')) || [];
+
+        // UI Initialization
+        updateUI();
+        renderHistory();
+
+        function updateUI() {
+            document.getElementById('currentOperand').innerText = currentOperand;
+            document.getElementById('previousOperand').innerText = previousOperand;
+
+            const badge = document.getElementById('planBadge');
+            const badgeText = document.getElementById('badgeText');
+            const counterBox = document.getElementById('freeLimitCounter');
+            const upgradeNavBtn = document.getElementById('upgradeNavBtn');
+
+            if (isPro) {
+                badge.className = "px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase flex items-center space-x-1.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-neon border border-pink-400/40";
+                badgeText.innerHTML = "✨ PRO PLAN ACTIVE";
+                counterBox.innerHTML = '<span class="text-pink-400 font-semibold">Unlimited Calculations</span>';
+                upgradeNavBtn.style.display = 'none';
+            } else {
+                badge.className = "px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase flex items-center space-x-1.5 bg-purple-900/40 border border-purple-500/30 text-purple-300";
+                badgeText.innerHTML = "FREE PLAN";
+                counterBox.innerHTML = `<span id="counterText">${freeCalcsLeft}/3 Free Calculations Remaining</span>`;
+                upgradeNavBtn.style.display = 'block';
+            }
+        }
+
+        function appendNumber(number) {
+            if (currentOperand === '0' || resetScreen) {
+                currentOperand = number;
+                resetScreen = false;
+            } else {
+                if (number === '.' && currentOperand.includes('.')) return;
+                currentOperand += number;
+            }
+            updateUI();
+        }
+
+        function appendOperator(op) {
+            if (operation !== null) compute();
+            previousOperand = `${currentOperand} ${op}`;
+            operation = op;
+            resetScreen = true;
+            updateUI();
+        }
+
+        function compute() {
+            if (operation === null || resetScreen) return;
+
+            // Check Freemium Limit
+            if (!isPro && freeCalcsLeft <= 0) {
+                document.getElementById('paywallModal').classList.remove('hidden');
+                document.getElementById('paywallModal').classList.add('flex');
+                return;
+            }
+
+            let computation;
+            const prev = parseFloat(previousOperand);
+            const current = parseFloat(currentOperand);
+            if (isNaN(prev) || isNaN(current)) return;
+
+            switch (operation) {
+                case '+':
+                    computation = prev + current;
+                    break;
+                case '-':
+                    computation = prev - current;
+                    break;
+                case '*':
+                    computation = prev * current;
+                    break;
+                case '/':
+                    computation = current === 0 ? 'Error' : prev / current;
+                    break;
+                case '%':
+                    computation = (prev * current) / 100;
+                    break;
+                default:
+                    return;
+            }
+
+            const calculationString = `${previousOperand} ${currentOperand} = ${computation}`;
+            
+            // Deduct free usage if not Pro
+            if (!isPro) {
+                freeCalcsLeft--;
+                localStorage.setItem('nova_freeCalcs', freeCalcsLeft);
+            }
+
+            // Save History
+            history.unshift(calculationString);
+            if (history.length > 20) history.pop();
+            localStorage.setItem('nova_history', JSON.stringify(history));
+
+            currentOperand = String(computation);
+            previousOperand = '';
+            operation = null;
+            resetScreen = true;
+
+            updateUI();
+            renderHistory();
+        }
+
+        function clearDisplay() {
+            currentOperand = '0';
+            previousOperand = '';
+            operation = null;
+            updateUI();
+        }
+
+        function deleteDigit() {
+            if (currentOperand.length === 1 || (currentOperand.length === 2 && currentOperand.startsWith('-'))) {
+                currentOperand = '0';
+            } else {
+                currentOperand = currentOperand.slice(0, -1);
+            }
+            updateUI();
+        }
+
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="text-xs text-purple-400/40 text-center py-10">No recent calculations</div>';
+                return;
+            }
+            historyList.innerHTML = history.map(item => `
+                <div class="bg-darkBg/60 border border-purple-500/10 p-2.5 rounded-xl font-mono text-xs flex justify-between items-center">
+                    <span>${item}</span>
+                </div>
+            `).join('');
+        }
+
+        function clearHistory() {
+            history = [];
+            localStorage.removeItem('nova_history');
+            renderHistory();
+        }
+
+        function toggleProStatus() {
+            isPro = !isPro;
+            localStorage.setItem('nova_isPro', isPro);
+            updateUI();
+        }
+
+        function simulateUpgrade() {
+            isPro = true;
+            localStorage.setItem('nova_isPro', 'true');
+            closePaywall();
+            updateUI();
+        }
+
+        function closePaywall() {
+            document.getElementById('paywallModal').classList.remove('flex');
+            document.getElementById('paywallModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+
