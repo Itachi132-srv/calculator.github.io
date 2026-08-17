@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaCalc Pro - Dark Purple Edition</title>
+    <title>NovaCalc Pro - Coin Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,7 +32,7 @@
             min-height: 100vh;
         }
         .glass {
-            background: rgba(23, 18, 38, 0.65);
+            background: rgba(23, 18, 38, 0.75);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(168, 85, 247, 0.2);
         }
@@ -54,43 +54,76 @@
 </head>
 <body class="flex flex-col items-center justify-center p-4 md:p-8">
 
-    <!-- Header / Navigation -->
-    <header class="w-full max-w-4xl flex justify-between items-center mb-6 px-4 py-3 glass rounded-2xl shadow-neon">
-        <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center shadow-neon font-bold text-xl">
+    <!-- AUTHENTICATION SCREEN -->
+    <div id="authScreen" class="w-full max-w-md glass rounded-3xl p-8 shadow-neon-lg border border-purple-500/40 my-auto">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center mx-auto mb-3 shadow-neon font-bold text-3xl">
                 N
             </div>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">NOVACALC</h1>
+            <p class="text-xs text-purple-300/70 mt-1">Enter your account to start calculating</p>
+        </div>
+
+        <div class="space-y-4">
             <div>
-                <h1 class="font-bold text-lg tracking-wider bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">NOVACALC</h1>
-                <p class="text-xs text-purple-300/70">Next-Gen Calculation Engine</p>
+                <label class="block text-xs font-medium text-purple-300 mb-1">Username</label>
+                <input type="text" id="authUsername" placeholder="Enter username..." class="w-full bg-darkBg/80 border border-purple-500/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-400">
             </div>
-        </div>
-
-        <div class="flex items-center space-x-4">
-            <!-- Plan Status Badge -->
-            <div id="planBadge" class="px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase flex items-center space-x-1.5 bg-purple-900/40 border border-purple-500/30 text-purple-300">
-                <span id="badgeText">FREE PLAN</span>
+            <div>
+                <label class="block text-xs font-medium text-purple-300 mb-1">Password</label>
+                <input type="password" id="authPassword" placeholder="Enter password..." class="w-full bg-darkBg/80 border border-purple-500/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-400">
             </div>
-            <!-- Toggle Pro Button (For Testing/Demo) -->
-            <button onclick="toggleProStatus()" id="upgradeNavBtn" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-4 py-2 rounded-xl font-medium shadow-neon transition-all">
-                Upgrade to PRO
+            <button onclick="handleLoginRegister()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold shadow-neon transition-all text-sm tracking-wide">
+                Login / Register
             </button>
+            <p class="text-[11px] text-center text-purple-400/60">New accounts automatically receive 🎁 **100 Free Coins**!</p>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Content Container -->
-    <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- MAIN APP WRAPPER (Hidden until login) -->
+    <div id="appContainer" class="w-full max-w-4xl hidden flex-col items-center">
         
-        <!-- Calculator Section (2 Cols) -->
-        <div class="md:col-span-2 glass rounded-3xl p-6 shadow-neon flex flex-col justify-between relative overflow-hidden">
-            
-            <!-- Top Status Bar inside Calculator -->
-            <div class="flex justify-between items-center mb-4 text-xs font-medium text-purple-300/80">
-                <div id="freeLimitCounter" class="flex items-center space-x-1.5 bg-purple-950/60 px-3 py-1 rounded-full border border-purple-500/20">
-                    <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span id="counterText">3/3 Free Calculations Remaining</span>
+        <!-- Header / Navigation -->
+        <header class="w-full flex justify-between items-center mb-6 px-4 py-3 glass rounded-2xl shadow-neon">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center shadow-neon font-bold text-xl">
+                    N
                 </div>
-                <div class="text-purple-400/60 uppercase tracking-widest text-[10px]">Standard Mode</div>
+                <div>
+                    <h1 class="font-bold text-sm tracking-wider text-white" id="navUsername">User</h1>
+                    <p class="text-[10px] text-purple-300/70">Coins Engine Active</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <!-- Coins Badge -->
+                <div class="px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide flex items-center space-x-1.5 bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 shadow-neon">
+                    <span>🪙 <span id="coinBalance">100</span> Coins</span>
+                </div>
+                <!-- Buy Coins Button -->
+                <button onclick="openCoinModal()" class="text-xs bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-500 hover:to-amber-500 px-3.5 py-2 rounded-xl font-medium shadow-neon transition-all text-black font-bold">
+                    Buy Coins
+                </button>
+                <!-- History Button -->
+                <button onclick="openHistoryModal()" class="text-xs glass-btn px-3.5 py-2 rounded-xl font-medium text-purple-200">
+                    History
+                </button>
+                <!-- Logout Button -->
+                <button onclick="logout()" class="text-xs bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-300 px-3 py-2 rounded-xl font-medium transition-all">
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Calculator Section -->
+        <main class="w-full max-w-xl glass rounded-3xl p-6 shadow-neon flex flex-col justify-between relative overflow-hidden">
+            
+            <!-- Cost Info Indicator -->
+            <div class="flex justify-between items-center mb-4 text-xs font-medium text-purple-300/80">
+                <div class="flex items-center space-x-1.5 bg-purple-950/60 px-3 py-1 rounded-full border border-purple-500/20">
+                    <span class="text-purple-400">⚡ Cost per calculation: <strong class="text-white">30 Coins</strong></span>
+                </div>
+                <div class="text-purple-400/60 uppercase tracking-widest text-[10px]">Secure Core</div>
             </div>
 
             <!-- Display Screen -->
@@ -125,87 +158,161 @@
                 <button onclick="appendNumber('.')" class="glass-btn py-4 rounded-2xl text-lg font-medium">.</button>
                 <button onclick="compute()" class="glass-btn bg-gradient-to-tr from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-4 rounded-2xl text-lg shadow-neon">=</button>
             </div>
-        </div>
+        </main>
+    </div>
 
-        <!-- History Sidebar (1 Col) -->
-        <div class="glass rounded-3xl p-6 shadow-neon flex flex-col h-[480px] md:h-auto">
+    <!-- BUY COINS MODAL -->
+    <div id="coinModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass max-w-md w-full rounded-3xl p-6 shadow-neon-lg border border-yellow-500/40 relative">
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-yellow-500/20 rounded-2xl mx-auto flex items-center justify-center mb-2 border border-yellow-400/40 text-yellow-300 shadow-neon">
+                    🪙
+                </div>
+                <h3 class="text-xl font-bold text-white">Top Up Coins</h3>
+                <p class="text-xs text-purple-200/70">Select a coin bundle to power your calculations</p>
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <div onclick="buyCoins(100, 1)" class="glass p-4 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 cursor-pointer flex justify-between items-center transition-all">
+                    <div>
+                        <div class="font-bold text-yellow-300">100 Coins</div>
+                        <div class="text-[10px] text-purple-300/60">Standard starter bundle</div>
+                    </div>
+                    <div class="bg-yellow-500 text-black font-bold text-xs px-3 py-1.5 rounded-xl">$1</div>
+                </div>
+
+                <div onclick="buyCoins(1500, 10)" class="glass p-4 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 cursor-pointer flex justify-between items-center transition-all">
+                    <div>
+                        <div class="font-bold text-yellow-300">1,500 Coins</div>
+                        <div class="text-[10px] text-purple-300/60">Most Popular Bundle</div>
+                    </div>
+                    <div class="bg-yellow-500 text-black font-bold text-xs px-3 py-1.5 rounded-xl">$10</div>
+                </div>
+
+                <div onclick="buyCoins(10000, 50)" class="glass p-4 rounded-2xl border border-yellow-500/20 hover:border-yellow-500/60 cursor-pointer flex justify-between items-center transition-all">
+                    <div>
+                        <div class="font-bold text-yellow-300">10,000 Coins</div>
+                        <div class="text-[10px] text-purple-300/60">Pro Unlimited Value</div>
+                    </div>
+                    <div class="bg-yellow-500 text-black font-bold text-xs px-3 py-1.5 rounded-xl">$50</div>
+                </div>
+            </div>
+
+            <button onclick="closeCoinModal()" class="w-full py-3 rounded-xl bg-purple-950/60 hover:bg-purple-900/40 text-purple-300 text-sm font-medium transition-all">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- HISTORY MODAL -->
+    <div id="historyModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass max-w-md w-full rounded-3xl p-6 shadow-neon-lg border border-purple-500/40 relative flex flex-col h-[450px]">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="font-bold text-sm tracking-wide text-purple-200 uppercase">Calculation History</h2>
-                <button onclick="clearHistory()" class="text-xs text-purple-400/60 hover:text-purple-300">Clear</button>
+                <h3 class="text-lg font-bold text-white uppercase tracking-wide">Calculation History</h3>
+                <button onclick="clearHistory()" class="text-xs text-purple-400/60 hover:text-purple-300">Clear All</button>
             </div>
-            <div id="historyList" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-sm text-purple-200/80">
-                <div class="text-xs text-purple-400/40 text-center py-10">No recent calculations</div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Paywall Modal -->
-    <div id="paywallModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass max-w-md w-full rounded-3xl p-8 shadow-neon-lg border border-purple-500/40 text-center relative animate-pulse">
-            <div class="w-16 h-16 bg-purple-600/30 rounded-2xl mx-auto flex items-center justify-center mb-4 border border-purple-400/40 text-purple-300 shadow-neon">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-            </div>
-            <h3 class="text-2xl font-bold mb-2 bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">Daily Limit Reached</h3>
-            <p class="text-sm text-purple-200/70 mb-6">You've used all 3 free calculations for today. Upgrade to Calculator Pro for unlimited calculations and full history access.</p>
             
-            <div class="space-y-3">
-                <button onclick="simulateUpgrade()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold shadow-neon transition-all">
-                    Upgrade to Calculator Pro
+            <div id="historyList" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-sm text-purple-200/80 mb-4">
+                <div class="text-xs text-purple-400/40 text-center py-20">No calculation records found</div>
+            </div>
+
+            <button onclick="closeHistoryModal()" class="w-full py-3 rounded-xl bg-purple-950/60 hover:bg-purple-900/40 text-purple-300 text-sm font-medium transition-all">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- LOW BALANCE MODAL -->
+    <div id="lowBalanceModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass max-w-sm w-full rounded-3xl p-6 shadow-neon-lg border border-red-500/40 text-center">
+            <div class="w-12 h-12 bg-red-500/20 rounded-2xl mx-auto flex items-center justify-center mb-3 text-red-400 text-xl font-bold">
+                ⚠️
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">Insufficient Coins</h3>
+            <p class="text-xs text-purple-200/70 mb-5">You need at least 30 coins to run this calculation. Top up your balance to continue.</p>
+            <div class="space-y-2">
+                <button onclick="closeLowBalanceModal(); openCoinModal();" class="w-full py-3 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm shadow-neon">
+                    Top Up Coins Now
                 </button>
-                <button onclick="closePaywall()" class="w-full py-3 rounded-xl bg-purple-950/40 hover:bg-purple-900/40 text-purple-300 text-sm font-medium transition-all">
-                    Maybe Later
+                <button onclick="closeLowBalanceModal()" class="w-full py-2.5 rounded-xl bg-purple-950/40 text-purple-300 text-xs font-medium">
+                    Close
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Script Logic -->
+    <!-- SCRIPT LOGIC -->
     <script>
+        let currentUser = null;
+        let usersData = JSON.parse(localStorage.getItem('nova_users_db')) || {};
+
         let currentOperand = '0';
         let previousOperand = '';
         let operation = null;
         let resetScreen = false;
-        
-        // Freemium State Management
-        let isPro = localStorage.getItem('nova_isPro') === 'true';
-        let freeCalcsLeft = parseInt(localStorage.getItem('nova_freeCalcs')) || 3;
-        let lastResetDate = localStorage.getItem('nova_lastResetDate') || '';
 
-        // Check Daily Reset (24h/Day Reset)
-        const todayStr = new Date().toDateString();
-        if (lastResetDate !== todayStr) {
-            freeCalcsLeft = 3;
-            localStorage.setItem('nova_freeCalcs', 3);
-            localStorage.setItem('nova_lastResetDate', todayStr);
+        // Check active session on load
+        const activeSession = localStorage.getItem('nova_active_user');
+        if (activeSession && usersData[activeSession]) {
+            currentUser = activeSession;
+            launchApp();
         }
 
-        let history = JSON.parse(localStorage.getItem('nova_history')) || [];
+        function handleLoginRegister() {
+            const userBox = document.getElementById('authUsername').value.trim();
+            const passBox = document.getElementById('authPassword').value.trim();
 
-        // UI Initialization
-        updateUI();
-        renderHistory();
+            if (!userBox || !passBox) {
+                alert('Please enter both username and password.');
+                return;
+            }
+
+            if (usersData[userBox]) {
+                // Existing User Login
+                if (usersData[userBox].password === passBox) {
+                    currentUser = userBox;
+                    localStorage.setItem('nova_active_user', currentUser);
+                    launchApp();
+                } else {
+                    alert('Incorrect password for this username.');
+                }
+            } else {
+                // Register New User with 100 free starting coins
+                usersData[userBox] = {
+                    password: passBox,
+                    coins: 100,
+                    history: []
+                };
+                localStorage.setItem('nova_users_db', JSON.stringify(usersData));
+                currentUser = userBox;
+                localStorage.setItem('nova_active_user', currentUser);
+                alert('Account created successfully! You received 🎁 100 Free Coins.');
+                launchApp();
+            }
+        }
+
+        function launchApp() {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+            document.getElementById('navUsername').innerText = currentUser;
+            updateUI();
+        }
+
+        function logout() {
+            localStorage.removeItem('nova_active_user');
+            currentUser = null;
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('authScreen').style.display = 'block';
+            document.getElementById('authUsername').value = '';
+            document.getElementById('authPassword').value = '';
+        }
 
         function updateUI() {
+            if (!currentUser) return;
+            const userData = usersData[currentUser];
+            document.getElementById('coinBalance').innerText = userData.coins;
             document.getElementById('currentOperand').innerText = currentOperand;
             document.getElementById('previousOperand').innerText = previousOperand;
-
-            const badge = document.getElementById('planBadge');
-            const badgeText = document.getElementById('badgeText');
-            const counterBox = document.getElementById('freeLimitCounter');
-            const upgradeNavBtn = document.getElementById('upgradeNavBtn');
-
-            if (isPro) {
-                badge.className = "px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase flex items-center space-x-1.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-neon border border-pink-400/40";
-                badgeText.innerHTML = "✨ PRO PLAN ACTIVE";
-                counterBox.innerHTML = '<span class="text-pink-400 font-semibold">Unlimited Calculations</span>';
-                upgradeNavBtn.style.display = 'none';
-            } else {
-                badge.className = "px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase flex items-center space-x-1.5 bg-purple-900/40 border border-purple-500/30 text-purple-300";
-                badgeText.innerHTML = "FREE PLAN";
-                counterBox.innerHTML = `<span id="counterText">${freeCalcsLeft}/3 Free Calculations Remaining</span>`;
-                upgradeNavBtn.style.display = 'block';
-            }
         }
 
         function appendNumber(number) {
@@ -230,10 +337,11 @@
         function compute() {
             if (operation === null || resetScreen) return;
 
-            // Check Freemium Limit
-            if (!isPro && freeCalcsLeft <= 0) {
-                document.getElementById('paywallModal').classList.remove('hidden');
-                document.getElementById('paywallModal').classList.add('flex');
+            // Check if user has enough coins (Cost: 30 coins)
+            const userData = usersData[currentUser];
+            if (userData.coins < 30) {
+                document.getElementById('lowBalanceModal').classList.remove('hidden');
+                document.getElementById('lowBalanceModal').classList.add('flex');
                 return;
             }
 
@@ -243,37 +351,24 @@
             if (isNaN(prev) || isNaN(current)) return;
 
             switch (operation) {
-                case '+':
-                    computation = prev + current;
-                    break;
-                case '-':
-                    computation = prev - current;
-                    break;
-                case '*':
-                    computation = prev * current;
-                    break;
-                case '/':
-                    computation = current === 0 ? 'Error' : prev / current;
-                    break;
-                case '%':
-                    computation = (prev * current) / 100;
-                    break;
-                default:
-                    return;
+                case '+': computation = prev + current; break;
+                case '-': computation = prev - current; break;
+                case '*': computation = prev * current; break;
+                case '/': computation = current === 0 ? 'Error' : prev / current; break;
+                case '%': computation = (prev * current) / 100; break;
+                default: return;
             }
 
             const calculationString = `${previousOperand} ${currentOperand} = ${computation}`;
             
-            // Deduct free usage if not Pro
-            if (!isPro) {
-                freeCalcsLeft--;
-                localStorage.setItem('nova_freeCalcs', freeCalcsLeft);
-            }
+            // Deduct 30 coins
+            userData.coins -= 30;
 
             // Save History
-            history.unshift(calculationString);
-            if (history.length > 20) history.pop();
-            localStorage.setItem('nova_history', JSON.stringify(history));
+            userData.history.unshift(calculationString);
+            if (userData.history.length > 30) userData.history.pop();
+
+            localStorage.setItem('nova_users_db', JSON.stringify(usersData));
 
             currentOperand = String(computation);
             previousOperand = '';
@@ -281,7 +376,6 @@
             resetScreen = true;
 
             updateUI();
-            renderHistory();
         }
 
         function clearDisplay() {
@@ -300,41 +394,57 @@
             updateUI();
         }
 
+        // Modals management
+        function openCoinModal() {
+            document.getElementById('coinModal').classList.remove('hidden');
+            document.getElementById('coinModal').classList.add('flex');
+        }
+        function closeCoinModal() {
+            document.getElementById('coinModal').classList.remove('flex');
+            document.getElementById('coinModal').classList.add('hidden');
+        }
+
+        function buyCoins(amount, price) {
+            usersData[currentUser].coins += amount;
+            localStorage.setItem('nova_users_db', JSON.stringify(usersData));
+            updateUI();
+            closeCoinModal();
+            alert(`Successfully purchased ${amount} coins for $${price}! 🎉`);
+        }
+
+        function openHistoryModal() {
+            renderHistory();
+            document.getElementById('historyModal').classList.remove('hidden');
+            document.getElementById('historyModal').classList.add('flex');
+        }
+        function closeHistoryModal() {
+            document.getElementById('historyModal').classList.remove('flex');
+            document.getElementById('historyModal').classList.add('hidden');
+        }
+
         function renderHistory() {
             const historyList = document.getElementById('historyList');
+            const history = usersData[currentUser].history || [];
             if (history.length === 0) {
-                historyList.innerHTML = '<div class="text-xs text-purple-400/40 text-center py-10">No recent calculations</div>';
+                historyList.innerHTML = '<div class="text-xs text-purple-400/40 text-center py-20">No calculation records found</div>';
                 return;
             }
             historyList.innerHTML = history.map(item => `
-                <div class="bg-darkBg/60 border border-purple-500/10 p-2.5 rounded-xl font-mono text-xs flex justify-between items-center">
+                <div class="bg-darkBg/60 border border-purple-500/10 p-3 rounded-xl font-mono text-xs flex justify-between items-center">
                     <span>${item}</span>
                 </div>
             `).join('');
         }
 
         function clearHistory() {
-            history = [];
-            localStorage.removeItem('nova_history');
+            usersData[currentUser].history = [];
+            localStorage.setItem('nova_users_db', JSON.stringify(usersData));
             renderHistory();
         }
 
-        function toggleProStatus() {
-            isPro = !isPro;
-            localStorage.setItem('nova_isPro', isPro);
-            updateUI();
-        }
-
-        function simulateUpgrade() {
-            isPro = true;
-            localStorage.setItem('nova_isPro', 'true');
-            closePaywall();
-            updateUI();
-        }
-
-        function closePaywall() {
-            document.getElementById('paywallModal').classList.remove('flex');
-            document.getElementById('paywallModal').classList.add('hidden');
+        function closeLowBalanceModal() {
+            document.getElementById('lowBalanceModal').classList.remove('flex');
+            document.getElementById('lowBalanceModal').classList.add('hidden');
         }
     </script>
 </body>
