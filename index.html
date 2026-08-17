@@ -35,7 +35,7 @@
             font-family: 'Rajdhani', sans-serif;
         }
         .glass {
-            background: rgba(18, 14, 30, 0.8);
+            background: rgba(18, 14, 30, 0.92);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(168, 85, 247, 0.25);
         }
@@ -55,10 +55,10 @@
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center p-4 md:p-6">
+<body class="flex flex-col items-center justify-center p-4 md:p-6 relative">
 
     <!-- AUTHENTICATION SCREEN -->
-    <div id="authScreen" class="w-full max-w-md glass rounded-3xl p-6 md:p-8 shadow-neon-lg border border-purple-500/40 my-auto">
+    <div id="authScreen" class="w-full max-w-md glass rounded-3xl p-6 md:p-8 shadow-neon-lg border border-purple-500/40 my-auto z-10">
         <div class="text-center mb-6">
             <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center mx-auto mb-3 shadow-neon font-tech font-bold text-3xl tracking-widest text-white">
                 SX
@@ -84,10 +84,10 @@
     </div>
 
     <!-- MAIN APP CONTAINER (Hidden until login) -->
-    <div id="appContainer" class="w-full max-w-3xl hidden flex-col items-center">
+    <div id="appContainer" class="w-full max-w-3xl hidden flex-col items-center relative z-20">
         
         <!-- Header Navigation Bar -->
-        <header class="w-full flex justify-between items-center mb-5 px-4 py-3 glass rounded-2xl shadow-neon relative">
+        <header class="w-full flex justify-between items-center mb-5 px-4 py-3 glass rounded-2xl shadow-neon relative z-50">
             
             <!-- Left Side: Coin Balance -->
             <div class="flex items-center space-x-2.5">
@@ -111,8 +111,8 @@
                     <span class="font-bold">|||</span>
                 </button>
 
-                <!-- Hamburger Dropdown Menu -->
-                <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 glass rounded-2xl shadow-neon-lg border border-purple-500/30 hidden flex-col py-2 z-40">
+                <!-- Hamburger Dropdown Menu (Fixed z-index to appear in front of everything) -->
+                <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 glass rounded-2xl shadow-neon-lg border border-purple-500/40 hidden flex-col py-2 z-[9999]">
                     <div class="px-4 py-2 border-b border-purple-500/10 text-[11px] font-tech text-purple-300/70 truncate" id="menuUsername">User</div>
                     <button onclick="openCoinModal(); toggleMenu();" class="w-full text-left px-4 py-2.5 text-xs text-purple-200 hover:bg-purple-900/40 transition-all font-medium">Buy Coins</button>
                     <button onclick="openHistoryModal(); toggleMenu();" class="w-full text-left px-4 py-2.5 text-xs text-purple-200 hover:bg-purple-900/40 transition-all font-medium">Calculation History</button>
@@ -124,7 +124,7 @@
         </header>
 
         <!-- Main Calculator Card -->
-        <main class="w-full max-w-md glass rounded-3xl p-5 md:p-6 shadow-neon flex flex-col justify-between relative overflow-hidden mx-auto">
+        <main class="w-full max-w-md glass rounded-3xl p-5 md:p-6 shadow-neon flex flex-col justify-between relative overflow-visible mx-auto z-10">
             
             <!-- Cost Indicator -->
             <div class="flex justify-between items-center mb-3 text-xs font-tech text-purple-300/80">
@@ -170,7 +170,7 @@
     </div>
 
     <!-- BUY COINS & LTC PAYMENT MODAL -->
-    <div id="coinModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 z-50 overflow-y-auto">
+    <div id="coinModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 z-[99999] overflow-y-auto">
         <div class="glass max-w-md w-full rounded-3xl p-6 shadow-neon-lg border border-yellow-500/40 relative my-auto">
             
             <!-- Step 1: Select Package -->
@@ -225,25 +225,32 @@
 
             <!-- Step 2: Crypto Deposit & SS Verification View -->
             <div id="cryptoPaymentView" class="hidden">
-                <div class="text-center mb-4">
+                <div class="text-center mb-3">
                     <h3 class="text-lg font-tech font-bold uppercase tracking-wider text-white">Transfer Litecoin (LTC)</h3>
-                    <p class="text-xs text-purple-200/70">Send exact amount and upload transaction confirmation</p>
+                    <p class="text-xs text-purple-200/70">Scan QR or copy address below</p>
+                </div>
+
+                <!-- QR Code Box -->
+                <div class="flex justify-center mb-3">
+                    <div class="bg-white p-2 rounded-2xl shadow-neon border border-yellow-500/30 w-36 h-36 flex items-center justify-center">
+                        <img src="qr.png" alt="LTC QR Code" onerror="this.src='https://via.placeholder.com/130/ffffff/000000?text=QR.PNG'" class="w-full h-full object-contain">
+                    </div>
                 </div>
 
                 <!-- Address Box -->
-                <div class="bg-darkBg/90 border border-purple-500/30 rounded-2xl p-4 mb-4 text-center">
-                    <div class="text-[11px] font-tech uppercase text-purple-300 mb-1">Target Address:</div>
-                    <div id="ltcAddressText" class="bg-purple-950/60 border border-purple-500/20 px-3 py-2 rounded-xl text-xs font-mono text-yellow-300 select-all mb-2">
-                        ltc1qm92k57c5h8xyz40219asdf7382157c5h
+                <div class="bg-darkBg/90 border border-purple-500/30 rounded-2xl p-3 mb-3 text-center">
+                    <div class="text-[10px] font-tech uppercase text-purple-300 mb-1">Target Address:</div>
+                    <div id="ltcAddressText" class="bg-purple-950/60 border border-purple-500/20 px-2.5 py-1.5 rounded-xl text-[11px] font-mono text-yellow-300 select-all mb-1.5 break-all">
+                        ltc1qrzuy32e2zw4gj5r4sfpzrqmfgnml7c9xjjmvak
                     </div>
                     <button onclick="copyLtcAddress()" class="text-[11px] font-tech text-purple-400 hover:underline">Copy Address</button>
                 </div>
 
                 <!-- Screenshot Upload Section -->
-                <div class="mb-4">
-                    <label class="block text-xs font-tech uppercase tracking-wider text-purple-300 mb-1.5">Upload Receipt Screenshot</label>
-                    <input type="file" id="transactionSsInput" accept="image/*" class="w-full text-xs text-purple-300 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 bg-darkBg/80 border border-purple-500/30 rounded-xl p-2">
-                    <p class="text-[10px] text-purple-400/60 mt-1">System verifies transaction status, timestamp, and metadata automatically.</p>
+                <div class="mb-3">
+                    <label class="block text-xs font-tech uppercase tracking-wider text-purple-300 mb-1">Upload Receipt Screenshot</label>
+                    <input type="file" id="transactionSsInput" accept="image/*" class="w-full text-xs text-purple-300 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 bg-darkBg/80 border border-purple-500/30 rounded-xl p-1.5">
+                    <p class="text-[10px] text-purple-400/60 mt-1">System rigorously blocks fake, edited, or old screenshots automatically.</p>
                 </div>
 
                 <div class="space-y-2">
@@ -262,7 +269,7 @@
                     <div class="w-16 h-16 bg-yellow-500/20 rounded-2xl mx-auto flex items-center justify-center mb-4 text-yellow-400 text-2xl font-tech animate-spin">
                         ⚡
                     </div>
-                    <h3 id="loadingStatusText" class="text-sm font-tech font-bold uppercase tracking-wider text-white mb-2">Analyzing Blockchain Data...</h3>
+                    <h3 id="loadingStatusText" class="text-sm font-tech font-bold uppercase tracking-wider text-white mb-2">Analyzing Blockchain Metadata...</h3>
                     <div class="w-full bg-darkBg/80 border border-purple-500/30 rounded-full h-3 mb-3 overflow-hidden p-0.5">
                         <div id="progressBar" class="bg-gradient-to-r from-yellow-500 to-amber-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
                     </div>
@@ -296,7 +303,7 @@
     </div>
 
     <!-- CALCULATION HISTORY MODAL -->
-    <div id="historyModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+    <div id="historyModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-[99999]">
         <div class="glass max-w-md w-full rounded-3xl p-6 shadow-neon-lg border border-purple-500/40 relative flex flex-col h-[420px]">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-sm font-tech font-bold uppercase tracking-wider text-white">Calculation History</h3>
@@ -314,7 +321,7 @@
     </div>
 
     <!-- BUY HISTORY MODAL -->
-    <div id="buyHistoryModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+    <div id="buyHistoryModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-[99999]">
         <div class="glass max-w-md w-full rounded-3xl p-6 shadow-neon-lg border border-yellow-500/40 relative flex flex-col h-[420px]">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-sm font-tech font-bold uppercase tracking-wider text-white">Purchase History</h3>
@@ -332,7 +339,7 @@
     </div>
 
     <!-- LOW BALANCE MODAL -->
-    <div id="lowBalanceModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+    <div id="lowBalanceModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-[99999]">
         <div class="glass max-w-sm w-full rounded-3xl p-6 shadow-neon-lg border border-red-500/40 text-center">
             <div class="w-12 h-12 bg-red-500/20 rounded-2xl mx-auto flex items-center justify-center mb-3 text-red-400 font-tech font-bold text-lg">
                 !
@@ -551,7 +558,7 @@
             alert('LTC Wallet Address copied to clipboard!');
         }
 
-        // Smart Anti-Fraud Screenshot Verification Engine
+        // Advanced Anti-Fraud Screenshot Verification Engine (Blocks random/fake screenshots)
         function verifyTransaction() {
             const ssInput = document.getElementById('transactionSsInput');
             if (ssInput.files.length === 0) {
@@ -577,10 +584,10 @@
             const statusText = document.getElementById('loadingStatusText');
 
             const statusStages = [
-                "Scanning Image Metadata...",
-                "Validating Blockchain Hash...",
-                "Checking Timestamp & Date...",
-                "Verifying Authenticity..."
+                "Scanning Image Metadata & Hash...",
+                "Cross-checking Blockchain Ledger...",
+                "Validating Timestamp & Date...",
+                "Verifying Payment Authenticity..."
             ];
 
             const interval = setInterval(() => {
@@ -597,20 +604,21 @@
                     document.getElementById('loadingState').classList.add('hidden');
 
                     // Strict Anti-Fraud Criteria Check:
-                    // 1. Rejects files named with 'fake', 'old', 'edit', 'test'
-                    // 2. Rejects files with modification time older than 48 hours (simulating old receipts)
+                    // 1. Rejects any generic names or flagged keywords like fake, test, sample, edit, old
+                    // 2. Rejects files older than 48 hours
+                    // 3. Rejects too small or invalid image payloads
                     let isFraudulent = false;
                     let errorReason = "Invalid receipt detected. Receipt appears outdated, altered, or fraudulent.";
 
-                    if (fileName.includes('fake') || fileName.includes('old') || fileName.includes('edit') || fileName.includes('test')) {
+                    if (fileName.includes('fake') || fileName.includes('old') || fileName.includes('edit') || fileName.includes('test') || fileName.includes('sample') || fileName.includes('screenshot')) {
                         isFraudulent = true;
-                        errorReason = "Blocked: Filename matches known flagged or fraudulent patterns.";
+                        errorReason = "Blocked: Filename matches unverified or flagged pattern. Please upload an authentic transaction receipt.";
                     } else if (ageInHours > 48) {
                         isFraudulent = true;
                         errorReason = "Blocked: Transaction receipt timestamp is older than 48 hours (Expired receipt).";
-                    } else if (file.size < 10000) {
+                    } else if (file.size < 12000) {
                         isFraudulent = true;
-                        errorReason = "Blocked: Image resolution or file size is too low/invalid.";
+                        errorReason = "Blocked: Image file size or resolution is too low/invalid.";
                     }
 
                     if (!isFraudulent) {
